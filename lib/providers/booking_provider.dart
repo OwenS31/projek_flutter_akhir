@@ -78,7 +78,7 @@ class BookingService {
       final user = _supabase.auth.currentUser;
       if (user == null) throw Exception('User tidak terautentikasi');
 
-      // Ambil semua booking pada spot dan tanggal yang sama
+      // Periksa bentrok waktu
       final existing = await _supabase
           .from('bookings')
           .select()
@@ -89,17 +89,17 @@ class BookingService {
       final startMin = _toMinutes(startTime);
       final endMin = _toMinutes(endTime);
 
-      final conflicts =
-          existing.where((booking) {
-            final existingStart = _toMinutes(booking['start_time']);
-            final existingEnd = _toMinutes(booking['end_time']);
-            return startMin < existingEnd && endMin > existingStart;
-          }).toList();
+      final conflicts = existing.where((booking) {
+        final existingStart = _toMinutes(booking['start_time']);
+        final existingEnd = _toMinutes(booking['end_time']);
+        return startMin < existingEnd && endMin > existingStart;
+      }).toList();
 
       if (conflicts.isNotEmpty) {
         throw Exception('Waktu tidak tersedia');
       }
 
+      // Simpan booking
       await _supabase.from('bookings').insert({
         'user_id': user.id,
         'spot_id': spotId,
@@ -109,7 +109,27 @@ class BookingService {
         'status': 'pending',
       });
 
+      // 🔽 Kurangi quota spot
+      final spotData = await _supabase
+          .from('spots')
+          .select('quota')
+          .eq('id', spotId)
+          .single();
+      print(spotData['quota']);
+
+      if (spotData != null && spotData['quota'] != null) {
+        final currentQuota = spotData['quota'] as int;
+        final newQuota = currentQuota - 1;
+        print(newQuota);
+
+        await _supabase.from('spots').update({
+          'quota': newQuota,
+          if (newQuota <= 0) 'is_available': false,
+        }).eq('id', spotId);
+      }
+
       _ref.invalidate(bookingsProvider);
+      _ref.invalidate(spotsProvider);
       return true;
     } catch (e) {
       throw Exception('Gagal membuat booking: ${e.toString()}');

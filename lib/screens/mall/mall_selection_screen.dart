@@ -97,27 +97,7 @@ class MallSelectionScreen extends ConsumerWidget {
                       color: Colors.blue.withOpacity(0.1),
                       borderRadius: BorderRadius.circular(8),
                     ),
-                    child: mall.imageUrl != null
-                        ? ClipRRect(
-                            borderRadius: BorderRadius.circular(8),
-                            child: Image.network(
-                              mall.imageUrl!,
-                              width: 60,
-                              height: 60,
-                              fit: BoxFit.cover,
-                              errorBuilder: (context, error, stackTrace) =>
-                                  const Icon(
-                                Icons.store_mall_directory,
-                                size: 32,
-                                color: Colors.blue,
-                              ),
-                            ),
-                          )
-                        : const Icon(
-                            Icons.store_mall_directory,
-                            size: 32,
-                            color: Colors.blue,
-                          ),
+                    child: _buildMallImage(mall.imageUrl),
                   ),
                   const SizedBox(width: 16),
                   Expanded(
@@ -211,6 +191,29 @@ class MallSelectionScreen extends ConsumerWidget {
             ],
           ),
         ),
+      ),
+    );
+  }
+
+  Widget _buildMallImage(String? imageUrl) {
+    const fallbackImageUrl =
+         'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcRaTUqMSvEooZ1whnJbNqM6jzOB1ieL0Uwmfw&s';
+
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(8),
+      child: Image.network(
+        imageUrl?.isNotEmpty == true ? imageUrl! : fallbackImageUrl,
+        width: 60,
+        height: 60,
+        fit: BoxFit.cover,
+        errorBuilder: (context, error, stackTrace) {
+          return Image.network(
+            fallbackImageUrl,
+            width: 60,
+            height: 60,
+            fit: BoxFit.cover,
+          );
+        },
       ),
     );
   }
