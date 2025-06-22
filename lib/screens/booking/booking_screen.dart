@@ -6,7 +6,8 @@ import '../../models/models.dart';
 import '../../providers/booking_provider.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
-  const BookingScreen({super.key});
+  final String mallId;
+  const BookingScreen({super.key , required this.mallId});
 
   @override
   ConsumerState<BookingScreen> createState() => _BookingScreenState();
@@ -128,7 +129,8 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final spotsAsync = ref.watch(spotsProvider);
+    final spotsAsync = ref.watch(spotsByMallProvider(widget.mallId));
+    // final spotsAsync = ref.watch(spotsProvider);
 
     return Scaffold(
       appBar: AppBar(title: const Text('Booking Spot')),

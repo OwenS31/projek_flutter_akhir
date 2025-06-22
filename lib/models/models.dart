@@ -1,5 +1,58 @@
 import 'package:flutter/material.dart';
 
+// Mall Model - Tambahkan ke file lib/models/models.dart
+class Mall {
+  final String id;
+  final String name;
+  final String address;
+  final String description;
+  final String city;
+  final String phone;
+  final String operatingHours;
+  final String? imageUrl;
+  final bool isActive;
+
+  Mall({
+    required this.id,
+    required this.name,
+    required this.address,
+    required this.description,
+    this.city = 'Surabaya',
+    required this.phone,
+    this.operatingHours = '10:00 - 22:00',
+    this.imageUrl,
+    this.isActive = true,
+  });
+
+  factory Mall.fromJson(Map<String, dynamic> json) {
+    return Mall(
+      id: json['id'].toString(),
+      name: json['name'] ?? '',
+      address: json['address'] ?? '',
+      description: json['description'] ?? '',
+      city: json['city'] ?? 'Surabaya',
+      phone: json['phone'] ?? '',
+      operatingHours: json['operating_hours'] ?? '10:00 - 22:00',
+      imageUrl: json['image_url'],
+      isActive: json['is_active'] ?? true,
+    );
+  }
+
+  Map<String, dynamic> toJson() {
+    return {
+      'id': id,
+      'name': name,
+      'address': address,
+      'description': description,
+      'city': city,
+      'phone': phone,
+      'operating_hours': operatingHours,
+      'image_url': imageUrl,
+      'is_active': isActive,
+    };
+  }
+}
+
 // Spot Model
 class Spot {
   final String id;
@@ -7,6 +60,7 @@ class Spot {
   final String description;
   final double pricePerHour;
   final bool isAvailable;
+  final String? mallId;
 
   Spot({
     required this.id,
@@ -14,6 +68,7 @@ class Spot {
     required this.description,
     required this.pricePerHour,
     required this.isAvailable,
+    this.mallId,
   });
 
   factory Spot.fromJson(Map<String, dynamic> json) {
@@ -23,6 +78,7 @@ class Spot {
       description: json['description'] ?? '',
       pricePerHour: (json['price_per_hour'] ?? 0.0).toDouble(),
       isAvailable: json['is_available'] ?? true,
+      mallId: json['mall_id']?.toString(),
     );
   }
 
@@ -33,6 +89,7 @@ class Spot {
       'description': description,
       'price_per_hour': pricePerHour,
       'is_available': isAvailable,
+      'mall_id': mallId,
     };
   }
 }

@@ -3,6 +3,31 @@ import 'package:supabase_flutter/supabase_flutter.dart';
 import '../models/models.dart';
 import 'auth_provider.dart';
 
+// Provider untuk mendapatkan daftar mall
+final mallsProvider = FutureProvider<List<Mall>>((ref) async {
+  final supabase = ref.watch(supabaseProvider);
+  final response = await supabase
+      .from('malls')
+      .select()
+      .eq('is_active', true)
+      .order('name');
+
+  return (response as List).map((mall) => Mall.fromJson(mall)).toList();
+});
+
+// Provider untuk mendapatkan spots berdasarkan mall
+final spotsByMallProvider = FutureProvider.family<List<Spot>, String>((ref, mallId) async {
+  final supabase = ref.watch(supabaseProvider);
+  final response = await supabase
+      .from('spots')
+      .select()
+      .eq('mall_id', mallId)
+      .eq('is_available', true)
+      .order('name');
+
+  return (response as List).map((spot) => Spot.fromJson(spot)).toList();
+});
+
 final spotsProvider = FutureProvider<List<Spot>>((ref) async {
   final supabase = ref.watch(supabaseProvider);
   final response = await supabase

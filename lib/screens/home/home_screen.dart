@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../providers/auth_provider.dart';
-import '../booking/booking_screen.dart';
 import '../booking/booking_history_screen.dart';
+import '../mall/mall_selection_screen.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -116,15 +116,15 @@ class HomeScreen extends ConsumerWidget {
                 children: [
                   _buildMenuCard(
                     context,
-                    title: 'Booking Spot',
-                    subtitle: 'Buat booking baru',
+                    title: 'Pilih Mall',
+                    subtitle: 'Pilih mall untuk booking spot',
                     icon: Icons.add_location_alt,
                     color: Colors.green,
                     onTap: () {
                       Navigator.push(
                         context,
                         MaterialPageRoute(
-                          builder: (context) => const BookingScreen(),
+                          builder: (context) => const MallSelectionScreen(),
                         ),
                       );
                     },
