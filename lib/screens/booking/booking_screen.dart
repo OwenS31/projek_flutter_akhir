@@ -7,7 +7,7 @@ import '../../providers/booking_provider.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   final String mallId;
-  const BookingScreen({super.key , required this.mallId});
+  const BookingScreen({super.key, required this.mallId});
 
   @override
   ConsumerState<BookingScreen> createState() => _BookingScreenState();
@@ -117,7 +117,9 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
         backgroundColor: Colors.green,
       );
 
+      if (mounted) {
       Navigator.pop(context);
+      }
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString(), backgroundColor: Colors.red);
     } finally {

@@ -16,41 +16,12 @@ class HomeScreen extends ConsumerWidget {
       appBar: AppBar(
         title: const Text('Spot Booking'),
         actions: [
-          PopupMenuButton<String>(
-            onSelected: (value) async {
-              if (value == 'logout') {
-                await authService.signOut();
-              }
+          IconButton(
+            icon: const Icon(Icons.logout, color: Colors.red),
+            tooltip: 'Keluar',
+            onPressed: () async {
+              await authService.signOut();
             },
-            itemBuilder:
-                (BuildContext context) => [
-                  PopupMenuItem<String>(
-                    value: 'logout',
-                    child: Row(
-                      children: [
-                        const Icon(Icons.logout, color: Colors.red),
-                        const SizedBox(width: 8),
-                        Text(
-                          'Keluar',
-                          style: TextStyle(color: Colors.red[700]),
-                        ),
-                      ],
-                    ),
-                  ),
-                ],
-            child: Padding(
-              padding: const EdgeInsets.all(8.0),
-              child: CircleAvatar(
-                backgroundColor: Colors.white,
-                child: Text(
-                  (user?.email?.substring(0, 1).toUpperCase() ?? 'U'),
-                  style: const TextStyle(
-                    color: Colors.blue,
-                    fontWeight: FontWeight.bold,
-                  ),
-                ),
-              ),
-            ),
           ),
         ],
       ),

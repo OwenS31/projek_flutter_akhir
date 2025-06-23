@@ -115,12 +115,10 @@ class BookingService {
           .select('quota')
           .eq('id', spotId)
           .single();
-      print(spotData['quota']);
 
       if (spotData != null && spotData['quota'] != null) {
         final currentQuota = spotData['quota'] as int;
         final newQuota = currentQuota - 1;
-        print(newQuota);
 
         await _supabase.from('spots').update({
           'quota': newQuota,
