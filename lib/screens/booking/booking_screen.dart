@@ -4,6 +4,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:intl/intl.dart';
 import '../../models/models.dart';
 import '../../providers/booking_provider.dart';
+import '../home/home_screen.dart';
 
 class BookingScreen extends ConsumerStatefulWidget {
   final String mallId;
@@ -118,7 +119,10 @@ class _BookingScreenState extends ConsumerState<BookingScreen> {
       );
 
       if (mounted) {
-      Navigator.pop(context);
+        Navigator.of(context).pushAndRemoveUntil(
+          MaterialPageRoute(builder: (context) => const HomeScreen()),
+          (route) => false,
+        );
       }
     } catch (e) {
       Fluttertoast.showToast(msg: e.toString(), backgroundColor: Colors.red);
